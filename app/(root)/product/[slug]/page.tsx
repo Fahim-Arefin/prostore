@@ -35,7 +35,6 @@ const ProductDetailsPage = async ({ params }: Props) => {
               <p>
                 {product.rating} of {product.numReviews} reviews
               </p>
-
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <ProductPrice
                   value={Number(product.price)}
