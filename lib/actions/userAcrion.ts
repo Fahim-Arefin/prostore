@@ -5,6 +5,7 @@ import { prisma } from "@/db/prisma";
 import { hashSync } from "bcrypt-ts-edge";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { signInFormSchema, signUpFormSchema } from "../validator";
+import { formatError } from "../utils";
 
 // Sign in the user with credentials
 export async function signInWithCredentials(
@@ -43,6 +44,8 @@ export async function signUp(prevState: unknown, formData: FormData) {
       password: formData.get("password"),
     });
 
+    console.log("user", user);
+
     const plainPassword = user.password;
 
     user.password = hashSync(user.password, 10);
@@ -61,14 +64,31 @@ export async function signUp(prevState: unknown, formData: FormData) {
     });
 
     return { success: true, message: "User created successfully" };
-  } catch (error) {
+  } catch (error: any) {
+    // console.log("error obj :", error);
+    // console.log("name:", error.name);
+    // console.log("code:", error.code);
+    // console.log("errors", error.errors);
+    // console.log("meta target:", error.meta?.target);
     if (isRedirectError(error)) {
       throw error;
     }
 
+    // building ZodError (validatoin error)
+    // Zod validation errors — for showing under inputs
+    if (error.name === "ZodError") {
+      const fieldErrors = error.flatten().fieldErrors;
+      return {
+        success: false,
+        message: "",
+        fieldErrors,
+      };
+    }
+
+    // All other errors go through formatError
     return {
       success: false,
-      message: "Something went wrong",
+      message: formatError(error),
     };
   }
 }
