@@ -9,7 +9,7 @@ type Props = {
 };
 
 function ProductCard({ product }: Props) {
-  console.log("product", product);
+  // console.log("product", product);
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="p-0 items-center">
