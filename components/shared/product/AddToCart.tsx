@@ -131,7 +131,7 @@ function AddToCart({ item, cart }: Props) {
     setAddLoading(false);
 
     if (!res.success) {
-      toast.error(`${item.name} could not be added to cart`, {
+      toast.error(res.message, {
         icon: <XCircle className="text-red-500 size-4" />,
         style: {
           backgroundColor: "#fee2e2",
