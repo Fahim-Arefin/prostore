@@ -93,7 +93,7 @@ export const config = {
 
       return token;
     },
-    authorized({ request, auth }: any) {
+    authorized({ request }: any) {
       // Check for cart cookie
       if (!request.cookies.get("sessionCartId")) {
         // Generate cart cookie
